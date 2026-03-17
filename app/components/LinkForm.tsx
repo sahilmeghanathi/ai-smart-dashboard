@@ -56,7 +56,8 @@ const useFormValidation = () => {
 
 export const LinkForm: React.FC<LinkFormProps> = ({ onSubmit, isLoading = false }) => {
   const [formData, setFormData] = useState<LinkFormData>({ title: '', url: '' });
-  const { errors, clearFieldError, validate } = useFormValidation();
+  const { errors, clearFieldError, validate, setErrors } = useFormValidation();
+  const [apiError, setApiError] = useState<string>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,19 +66,46 @@ export const LinkForm: React.FC<LinkFormProps> = ({ onSubmit, isLoading = false 
       [name]: value,
     }));
     clearFieldError(name as keyof LinkFormErrors);
+    setApiError(undefined);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate(formData)) {
+    if (!validate(formData)) return;
+
+    try {
+      const response = await fetch('/api/links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ title: data.error, url: undefined });
+        return;
+      }
+
       onSubmit(formData);
       setFormData({ title: '', url: '' });
+      setErrors({});
+    } catch (error) {
+      setApiError(
+        error instanceof Error ? error.message : 'Failed to add link. Please try again.'
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 p-6 rounded-lg shadow border border-gray-200 dark:border-gray-700">
       <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Add New Link</h2>
+
+      {apiError && (
+        <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm">
+          {apiError}
+        </div>
+      )}
 
       <FormField
         id="title"

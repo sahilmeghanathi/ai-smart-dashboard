@@ -1,5 +1,15 @@
 import '@testing-library/jest-dom';
 
+// Polyfills for jsdom environment
+if (typeof globalThis.Request === 'undefined') {
+  // @ts-ignore
+  globalThis.Request = global.Request;
+}
+if (typeof globalThis.Response === 'undefined') {
+  // @ts-ignore
+  globalThis.Response = global.Response;
+}
+
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
   useRouter() {

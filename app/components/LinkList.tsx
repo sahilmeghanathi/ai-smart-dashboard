@@ -1,12 +1,9 @@
+'use client';
+
 import React from 'react';
 import { LinkCard } from './LinkCard';
 
-interface Link {
-  id: string;
-  title: string;
-  url: string;
-  visitCount: number;
-}
+import type { Link } from '@/app/api/types';
 
 interface LinkListProps {
   links: Link[];
