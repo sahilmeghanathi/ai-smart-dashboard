@@ -1,0 +1,33 @@
+name: AI Cloud Agent
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours
+  workflow_dispatch: # manual trigger
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install deps
+        run: npm install
+
+      - name: Run AI script
+        run: node scripts/agent.js
+
+      - name: Commit report
+        run: |
+          git config --global user.name "AI Agent"
+          git config --global user.email "ai@bot.com"
+          git add reports/
+          git commit -m "AI: Update top links report" || echo "No changes"
+          git push
