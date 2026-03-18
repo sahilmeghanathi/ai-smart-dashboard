@@ -2,32 +2,49 @@ name: AI Cloud Agent
 
 on:
   schedule:
-    - cron: "0 */6 * * *" # every 6 hours
-  workflow_dispatch: # manual trigger
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   run-agent:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: "18"
+          node-version: "22"
 
       - name: Install deps
         run: npm install
 
-      - name: Run AI script
+      - name: Run AI Agent
         run: node scripts/agent.js
 
-      - name: Commit report
+      - name: Check for changes
+        id: git-check
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit & Push
+        if: steps.git-check.outputs.changed == 'true'
         run: |
           git config --global user.name "AI Agent"
           git config --global user.email "ai@bot.com"
           git add reports/
-          git commit -m "AI: Update top links report" || echo "No changes"
+          git commit -m "🤖 AI: Update report"
           git push
