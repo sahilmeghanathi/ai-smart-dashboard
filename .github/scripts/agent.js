@@ -2,7 +2,6 @@ const fs = require("fs");
 
 async function run() {
   try {
-    // const res = await fetch("https://ai-smart-dashboard-705jxmell-sahilgirimeghanathi-2765s-projects.vercel.app/api/links/top?limit=5");
     const res = await fetch("https://ai-smart-dashboard.onrender.com/api/links/top?limit=5");
    
     const data = await res.json();
