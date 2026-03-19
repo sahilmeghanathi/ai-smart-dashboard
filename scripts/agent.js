@@ -2,7 +2,7 @@ const fs = require("fs");
 
 async function run() {
   try {
-    const res = await fetch("http://localhost:3000/api/links/top?limit=5");
+    const res = await fetch("https://ai-smart-dashboard.onrender.com/api/links/top?limit=5");
     const data = await res.json();
 
     const report = `
