@@ -7,6 +7,7 @@ import {
   incrementVisitCount,
   type Link,
 } from '@/app/lib/links-storage';
+import { validateCreateLinkRequest } from '@/app/lib/validation';
 
 /**
  * Request body for creating a link
@@ -14,57 +15,6 @@ import {
 interface CreateLinkRequest {
   title: string;
   url: string;
-}
-
-/**
- * Validates URL format
- */
-function isValidUrl(urlString: string): boolean {
-  try {
-    new URL(urlString);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Validates create link request
- */
-function validateCreateRequest(body: unknown): {
-  valid: boolean;
-  error?: string;
-  data?: CreateLinkRequest;
-} {
-  if (!body || typeof body !== 'object') {
-    return { valid: false, error: 'Request body is required' };
-  }
-
-  const { title, url } = body as Record<string, unknown>;
-
-  // Validate title
-  if (!title || typeof title !== 'string') {
-    return { valid: false, error: 'Title is required and must be a string' };
-  }
-
-  if (title.trim().length === 0) {
-    return { valid: false, error: 'Title cannot be empty' };
-  }
-
-  if (title.length > 200) {
-    return { valid: false, error: 'Title must be less than 200 characters' };
-  }
-
-  // Validate URL
-  if (!url || typeof url !== 'string') {
-    return { valid: false, error: 'URL is required and must be a string' };
-  }
-
-  if (!isValidUrl(url)) {
-    return { valid: false, error: 'URL must be a valid URL' };
-  }
-
-  return { valid: true, data: { title: title.trim(), url } };
 }
 
 /**
@@ -101,7 +51,7 @@ export async function GET(): Promise<NextResponse> {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
-    const validation = validateCreateRequest(body);
+    const validation = validateCreateLinkRequest(body);
 
     if (!validation.valid) {
       return NextResponse.json(

@@ -10,7 +10,7 @@ interface LinkCardProps {
   onVisit?: (id: string) => void;
 }
 
-export const LinkCard: React.FC<LinkCardProps> = ({
+const LinkCardComponent: React.FC<LinkCardProps> = ({
   id,
   title,
   url,
@@ -93,3 +93,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     </div>
   );
 };
+
+// Memoize component to prevent unnecessary re-renders when props haven't changed
+export const LinkCard = React.memo(LinkCardComponent);

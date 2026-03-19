@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { isValidUrl, validateTitle, validateURL } from '@/app/lib/validation';
 
 interface LinkFormData {
   title: string;
@@ -15,15 +16,6 @@ interface LinkFormProps {
   isLoading?: boolean;
 }
 
-const isValidUrl = (url: string): boolean => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
 const useFormValidation = () => {
   const [errors, setErrors] = useState<LinkFormErrors>({});
 
@@ -37,14 +29,14 @@ const useFormValidation = () => {
   const validate = (formData: LinkFormData): boolean => {
     const newErrors: LinkFormErrors = {};
 
-    if (!formData.title.trim()) {
-      newErrors.title = 'Title is required';
+    const titleError = validateTitle(formData.title);
+    if (titleError) {
+      newErrors.title = titleError;
     }
 
-    if (!formData.url.trim()) {
-      newErrors.url = 'URL is required';
-    } else if (!isValidUrl(formData.url)) {
-      newErrors.url = 'Please enter a valid URL';
+    const urlError = validateURL(formData.url);
+    if (urlError) {
+      newErrors.url = urlError;
     }
 
     setErrors(newErrors);
@@ -83,7 +75,7 @@ export const LinkForm: React.FC<LinkFormProps> = ({ onSubmit, isLoading = false 
       const data = await response.json();
 
       if (!response.ok) {
-        setErrors({ title: data.error, url: undefined });
+        setApiError(data.error || 'Failed to add link');
         return;
       }
 

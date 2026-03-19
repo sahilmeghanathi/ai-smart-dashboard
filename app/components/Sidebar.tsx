@@ -52,7 +52,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {isOpen && onClose && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-20"
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
           role="presentation"
           aria-hidden="true"
         />
