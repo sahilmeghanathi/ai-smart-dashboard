@@ -1,7 +1,7 @@
-import React from 'react';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { DashboardIcon, LinksIcon, SettingsIcon } from './Icons';
+import React from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { DashboardIcon, LinksIcon, SettingsIcon } from "./Icons";
 
 interface NavItem {
   href: string;
@@ -11,18 +11,23 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    href: '/dashboard',
-    label: 'Dashboard',
+    href: "/dashboard",
+    label: "Dashboard",
     icon: DashboardIcon,
   },
+//   {
+//     href: "/dashboard/links",
+//     label: "Links",
+//     icon: LinksIcon,
+//   },
   {
-    href: '/dashboard/links',
-    label: 'Links',
+    href: "/dashboard/link-manager",
+    label: "Link Manager",
     icon: LinksIcon,
   },
   {
-    href: '/dashboard/settings',
-    label: 'Settings',
+    href: "/dashboard/settings",
+    label: "Settings",
     icon: SettingsIcon,
   },
 ];
@@ -41,8 +46,8 @@ export const SidebarNav: React.FC = () => {
             href={item.href}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
               isActive
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                ? "bg-blue-600 text-white"
+                : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
             }`}
           >
             <Icon className="w-5 h-5" />
