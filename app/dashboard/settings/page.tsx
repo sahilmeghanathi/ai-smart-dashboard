@@ -1,25 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React from "react";
+import { useSettings } from "./useSettings";
 
 export default function SettingsPage() {
-  const [formData, setFormData] = useState({
-    theme: 'auto',
-    notifications: true,
-    emailUpdates: true,
-    twoFactor: false,
-  });
-
-  const handleChange = (field: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleSave = () => {
-    alert('Settings saved successfully!');
-  };
+  const { formData, handleChange, handleSave } = useSettings();
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -44,7 +29,7 @@ export default function SettingsPage() {
             </label>
             <select
               value={formData.theme}
-              onChange={(e) => handleChange('theme', e.target.value)}
+              onChange={(e) => handleChange("theme", e.target.value)}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
             >
               <option value="auto">Auto</option>
@@ -65,7 +50,7 @@ export default function SettingsPage() {
             <input
               type="checkbox"
               checked={formData.notifications}
-              onChange={(e) => handleChange('notifications', e.target.checked)}
+              onChange={(e) => handleChange("notifications", e.target.checked)}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
             />
             <span className="text-gray-900 dark:text-white">
@@ -76,7 +61,7 @@ export default function SettingsPage() {
             <input
               type="checkbox"
               checked={formData.emailUpdates}
-              onChange={(e) => handleChange('emailUpdates', e.target.checked)}
+              onChange={(e) => handleChange("emailUpdates", e.target.checked)}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
             />
             <span className="text-gray-900 dark:text-white">
@@ -96,7 +81,7 @@ export default function SettingsPage() {
             <input
               type="checkbox"
               checked={formData.twoFactor}
-              onChange={(e) => handleChange('twoFactor', e.target.checked)}
+              onChange={(e) => handleChange("twoFactor", e.target.checked)}
               className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
             />
             <span className="text-gray-900 dark:text-white">

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { UserProfile } from './UserProfile';
 import { MenuIcon } from './Icons';
 
 interface HeaderProps {
@@ -25,7 +24,6 @@ export const Header: React.FC<HeaderProps> = ({ title, onMenuClick }) => {
             {title}
           </h1>
         </div>
-        <UserProfile userName="John Doe" userEmail="john@example.com" />
       </div>
     </header>
   );
